@@ -4,7 +4,7 @@ var async = require('async');
 var smartaverage = require('smartaverage');
 var providers = require('./providers');
 
-var TIMEOUT = 5000;
+var TIMEOUT = 30000;
 var ACCEPTABLE_VARIANCE = 3;
 var MINIMUM_VALUES_VARIANCE = 3;
 
@@ -52,8 +52,11 @@ function requestPrice(urlAPI, callback){
 /**
  * GET PRICE
  */
-module.exports = function getPrice(){
+module.exports = function getPrice(options){
     var df = Q.defer();
+    if ( options && typeof options.TIMEOUT === Number && options.TIMEOUT > 0) {
+        TIMEOUT = options.TIMEOUT;
+    }
     async.parallel(providers.map(function(provider){
             return function(callback){
                 requestPrice(provider.url, function(jsonResponse){
