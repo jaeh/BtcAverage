@@ -52,8 +52,11 @@ function requestPrice(urlAPI, callback){
 /**
  * GET PRICE
  */
-module.exports = function getPrice(){
+module.exports = function getPrice(options){
     var df = Q.defer();
+    if ( options && typeof options.TIMEOUT === Number && options.TIMEOUT > 0) {
+        TIMEOUT = options.TIMEOUT;
+    }
     async.parallel(providers.map(function(provider){
             return function(callback){
                 requestPrice(provider.url, function(jsonResponse){
